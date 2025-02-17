@@ -12,8 +12,44 @@
 use std::fmt::{self, Display, Formatter};
 
 pub fn fib(n: i32) -> i32 {
-    // TODO: Implement the logic to calculate the nth Fibonacci number using matrix exponentiation
-    0 // Placeholder return value
+    if n <= 1 {
+        return n;
+    }
+
+    // 定义基础矩阵 [[1,1],[1,0]]
+    let mut base = vec![vec![1, 1], vec![1, 0]];
+    let mut result = matrix_power(&mut base, n - 1);
+    
+    result[0][0]
+}
+
+// 计算矩阵的n次幂
+fn matrix_power(base: &mut Vec<Vec<i32>>, mut n: i32) -> Vec<Vec<i32>> {
+    let mut result = vec![vec![1, 0], vec![0, 1]]; // 单位矩阵
+    
+    while n > 0 {
+        if n & 1 == 1 {
+            result = matrix_multiply(&result, base);
+        }
+        *base = matrix_multiply(base, base);
+        n >>= 1;
+    }
+    
+    result
+}
+
+// 2x2矩阵乘法
+fn matrix_multiply(a: &Vec<Vec<i32>>, b: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+    vec![
+        vec![
+            a[0][0] * b[0][0] + a[0][1] * b[1][0],
+            a[0][0] * b[0][1] + a[0][1] * b[1][1]
+        ],
+        vec![
+            a[1][0] * b[0][0] + a[1][1] * b[1][0],
+            a[1][0] * b[0][1] + a[1][1] * b[1][1]
+        ]
+    ]
 }
 
 #[cfg(test)]

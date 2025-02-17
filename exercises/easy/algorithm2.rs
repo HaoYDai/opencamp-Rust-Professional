@@ -72,8 +72,32 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn reverse(&mut self){
-		// TODO
+	pub fn reverse(&mut self) {
+		// 如果链表为空或只有一个节点，无需反转
+		if self.length <= 1 {
+			return;
+		}
+
+		// 保存开始和结束节点
+		let old_start = self.start;
+		let old_end = self.end;
+
+		let mut current = self.start;
+		while let Some(current_ptr) = current {
+			let node = unsafe { &mut *current_ptr.as_ptr() };
+			
+			// 交换当前节点的prev和next指针
+			let temp = node.next;
+			node.next = node.prev;
+			node.prev = temp;
+			
+			// 移动到下一个节点（原链表的next方向）
+			current = temp;
+		}
+
+		// 更新链表的start和end指针
+		self.start = old_end;
+		self.end = old_start;
 	}
 }
 

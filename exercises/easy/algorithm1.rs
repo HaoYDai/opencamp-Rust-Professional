@@ -69,14 +69,46 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+	pub fn merge(list_a: LinkedList<T>,list_b: LinkedList<T>) -> Self
+	where T: Clone + PartialOrd
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
-        }
+		let mut merged_list = LinkedList::new();
+		let mut current_a = list_a.start;
+		let mut current_b = list_b.start;
+
+		while let (Some(node_a), Some(node_b)) = (current_a, current_b) {
+            
+			unsafe {
+				if (*node_a.as_ptr()).val < (*node_b.as_ptr()).val {
+					let next = (*node_a.as_ptr()).next;
+					merged_list.add((*node_a.as_ptr()).val.clone());
+					current_a = next;
+				} else {
+					let next = (*node_b.as_ptr()).next;
+					merged_list.add((*node_b.as_ptr()).val.clone());
+					current_b = next;
+				}
+			}
+		}
+
+		// 处理剩余的节点
+		while let Some(node_a) = current_a {
+			unsafe {
+				let next = (*node_a.as_ptr()).next;
+				merged_list.add((*node_a.as_ptr()).val.clone());
+				current_a = next;
+			}
+		}
+
+		while let Some(node_b) = current_b {
+			unsafe {
+				let next = (*node_b.as_ptr()).next;
+				merged_list.add((*node_b.as_ptr()).val.clone());
+				current_b = next;
+			}
+		}
+
+		merged_list
 	}
 }
 

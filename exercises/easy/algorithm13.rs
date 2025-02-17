@@ -14,8 +14,33 @@
 use std::fmt::{self, Display, Formatter};
 
 pub fn are_anagrams(s1: String, s2: String) -> bool {
-    // TODO: Implement the logic to check if two strings are anagrams
-    false // Placeholder return value
+    // 将两个字符串转换为小写并只保留字母字符
+    let clean1: String = s1
+        .to_lowercase()
+        .chars()
+        .filter(|c| c.is_alphabetic())
+        .collect();
+        
+    let clean2: String = s2
+        .to_lowercase()
+        .chars()
+        .filter(|c| c.is_alphabetic())
+        .collect();
+    
+    // 如果清理后的字符串长度不同，一定不是变位词
+    if clean1.len() != clean2.len() {
+        return false;
+    }
+    
+    // 将字符串转换为字符向量并排序
+    let mut chars1: Vec<char> = clean1.chars().collect();
+    let mut chars2: Vec<char> = clean2.chars().collect();
+    
+    chars1.sort_unstable();
+    chars2.sort_unstable();
+    
+    // 比较排序后的字符数组是否相等
+    chars1 == chars2
 }
 
 #[cfg(test)]

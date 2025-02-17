@@ -9,9 +9,17 @@
 
 use std::fmt::{self, Display, Formatter};
 
-pub fn get_sum(a: i32, b: i32) -> i32 {
-    // TODO: Implement the logic to calculate the sum of two integers without using `+`
-    0 // Placeholder return value
+pub fn get_sum(mut a: i32, mut b: i32) -> i32 {
+    while b != 0 {
+        // 计算进位
+        let carry = (a & b) << 1;
+        // 计算不带进位的和（异或运算）
+        a = a ^ b;
+        // 更新b为进位值，继续循环直到没有进位
+        b = carry;
+    }
+    
+    a
 }
 
 #[cfg(test)]
